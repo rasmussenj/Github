@@ -148,7 +148,7 @@ class CanvasFrame():
 
     def minusB(self):
         if self.zoomX > 1:
-            self.zoomX -= 1
+            self.zoomX -= 1.5
         self.drawCurve()
 
     def drawCurve(self):

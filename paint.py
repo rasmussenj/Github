@@ -34,7 +34,7 @@ class MakeCurves():
         self.plotLines()
 
     def drawGrid(self):
-        self.grid = self.canvas.create_line(0, self.height/2, self.width, self.height/2, width=0, fill=self.gridColor)
+        self.grid = self.canvas.create_line(0, 0, self.width, 0, width=0, fill=self.gridColor)
 
     def plotLines(self):
 
@@ -42,16 +42,15 @@ class MakeCurves():
         for i in range(0, len(self.dataSet)):
             x = float(i) / self.xMax * self.width * self.zoomX
             if self.dataSet[i] == "":
-                y = float(self.height)+1
-            elif float(self.dataSet[i]) > float(self.yMinMax[0]) or float(self.dataSet[i]) < float(self.yMinMax[1]):
-                y = self.height - float(self.dataSet[i])
+                y = self.height + 1
             else:
-                y = float(self.height)+1
+                y = (float(self.dataSet[i]) - self.yMinMax[0]) / (self.yMinMax[1]-self.yMinMax[0]) * self.height
+                y = self.height - y
             self.coordinates.append(x)
             self.coordinates.append(y)
 
         self.canvas.create_line(self.coordinates, fill=self.color)
-        self.canvas.coords(self.grid, 0, self.height/2, x, self.height/2)
+        self.canvas.coords(self.grid, 0, 0, x, 0)
         self.canvas.config(scrollregion=self.canvas.bbox(self.grid))
 
     # Event Handlers
