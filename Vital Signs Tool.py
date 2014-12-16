@@ -10,8 +10,6 @@ headlines = []
 values = []
 color = ["blue","red","green", "purple", "orange", "black"]
 
-#Test
-
 def keyControlQ(event):
     menuBar.quitWarning()
 
