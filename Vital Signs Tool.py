@@ -56,7 +56,6 @@ def clearEverything():
     infoBar.clearInfoBar()
     mainMenu.clearMainMenu()
 
-
 class MenuBar():
     def __init__(self, root):
         '''
@@ -232,8 +231,6 @@ class CanvasFrame():
         '''
         self.drawCurve()
 
-
-
 class InfoBar():
     def __init__(self, root):
         '''
@@ -328,7 +325,6 @@ class InfoBar():
         self.varsSpinBox = []
         self.i = 0
 
-
 class Statusbar():
     def __init__(self, root):
         '''
@@ -348,7 +344,6 @@ class Statusbar():
         self.now = time.strftime("%A %d.%m.%Y    %H:%M:%S")
         self.status.configure(text=self.now)
         self.status.after(1000, self.updateDateTime)
-
 
 
 root = Tk()
