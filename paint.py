@@ -37,17 +37,20 @@ class MakeCurves():
         self.grid = self.canvas.create_line(0, 0, self.width, 0, width=0, fill=self.gridColor)
 
     def plotLines(self):
+        self.lenDataSet = len(self.dataSet)
+        self.coordinates = [0 for x in range(self.lenDataSet * 2)]
 
-        self.coordinates = []
-        for i in range(0, len(self.dataSet)):
+        for i in range(0, self.lenDataSet):
             x = float(i) / self.xMax * self.width * self.zoomX
             if self.dataSet[i] == "":
                 y = self.height + 1
             else:
                 y = (float(self.dataSet[i]) - self.yMinMax[0]) / (self.yMinMax[1]-self.yMinMax[0]) * self.height
                 y = self.height - y
-            self.coordinates.append(x)
-            self.coordinates.append(y)
+            self.coordinates[i*2] = x
+            self.coordinates[i*2+1] = y
+            #self.coordinates.append(x)
+            #self.coordinates.append(y)
 
         self.canvas.create_line(self.coordinates, fill=self.color)
         self.canvas.coords(self.grid, 0, 0, x, 0)
