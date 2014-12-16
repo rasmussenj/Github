@@ -348,6 +348,8 @@ class Statusbar():
 
 root = Tk()
 
+#blablabla
+
 # **** Title ****
 root.wm_title("Vital Signs Data Explorer 1.0")
 root.geometry('1000x700')
