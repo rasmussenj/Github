@@ -267,15 +267,15 @@ class InfoBar():
             self.var0 = StringVar()
             self.var1 = StringVar()
             self.var1.set(self.yMax)
-            self.entry1min = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var0).grid(row=2, column=(self.i*2+1))
+            self.entryMin = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var0).grid(row=2, column=(self.i*2+1))
             self.varsSpinBox.append(self.var0)
-            self.entry1max = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var1).grid(row=3, column=(self.i*2+1))
+            self.entryMax = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var1).grid(row=3, column=(self.i*2+1))
             self.varsSpinBox.append(self.var1)
 
             self.i += 1
 
-        self.resetButton = Button(self.infoframe, text="Reset All", command=self.resetSpinBox)
-        self.resetButton.grid(row=3, column=8, padx=20)
+        Button(self.infoframe, text="Refresh", command=canvasFrame.drawCurve).grid(row=2, column=self.i*2, padx=20)
+        Button(self.infoframe, text="Reset All", command=self.resetSpinBox).grid(row=3, column=self.i*2, padx=20)
 
     def resetSpinBox(self):
         '''
@@ -284,9 +284,10 @@ class InfoBar():
         '''
         for j in range(len(self.varsSpinBox)):
             if j%2 == 0:
-                self.varsSpinBox[j].set("1")
+                self.varsSpinBox[j].set(1)
             else:
                 self.varsSpinBox[j].set(self.yMax)
+        canvasFrame.drawCurve()
 
     def updateInfo(self):
         '''
