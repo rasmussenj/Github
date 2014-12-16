@@ -9,7 +9,7 @@ varsCheckButton = []
 varsSpinBox = []
 headlines = []
 values = []
-color = ["blue","red","green", "purple", "orange", "mangenta2","black"]
+color = ["blue","red","green", "purple", "orange", "black"]
 
 
 def keyControlQ(event):
