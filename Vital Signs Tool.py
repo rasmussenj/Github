@@ -1,5 +1,4 @@
 from Tkinter import *
-from tkFileDialog import *
 import tkMessageBox
 import time
 import paint
