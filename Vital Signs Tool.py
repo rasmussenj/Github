@@ -4,8 +4,6 @@ import time
 import paint
 import data
 
-#lalalala
-
 varsCheckButton = []
 varsSpinBox = []
 headlines = []
