@@ -222,8 +222,8 @@ class InfoBar():
 
     def getMinMax(self, sensor):
         self.minMaX = []
-        self.minMaX.append(self.varsSpinBox[sensor*2].get())
-        self.minMaX.append(self.varsSpinBox[sensor*2+1].get())
+        self.minMaX.append(float(self.varsSpinBox[sensor*2].get()))
+        self.minMaX.append(float(self.varsSpinBox[sensor*2+1].get()))
         return self.minMaX
 
     def clearInfoBar(self):
