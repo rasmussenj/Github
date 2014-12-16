@@ -30,12 +30,11 @@ def newFile():
         canvasFrame.drawCurve()
 
 def clearEverything():
-    global mainMenu, canvasFrame, headlines, values, varsSpinBox, varsCheckButton, firstResize
+    global mainMenu, canvasFrame, headlines, values, varsSpinBox, varsCheckButton
     headlines = []
     values = []
     varsSpinBox = []
     varsCheckButton = []
-    firstResize = True
     infoBar.clearInfoBar()
     mainMenu.clearMainMenu()
 
