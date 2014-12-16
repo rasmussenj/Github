@@ -8,7 +8,6 @@ import data
 varsCheckButton = []
 varsSpinBox = []
 headlines = []
-firstResize = True
 values = []
 color = ["blue","red","green", "purple", "orange", "mangenta2","black"]
 
@@ -20,7 +19,7 @@ def keyControlO(event):
     newFile()
 
 def newFile():
-    global daten, mainMenu, canvasFrame, headlines, values
+    global mainMenu, canvasFrame, headlines, values
     if (daten.getFilename()):
         #CLEAE ALL THINGS
         clearEverything()
@@ -33,13 +32,12 @@ def newFile():
         canvasFrame.drawCurve()
 
 def clearEverything():
-    global daten, mainMenu, canvasFrame, headlines, values, varsSpinBox, varsCheckButton, firstResize
+    global mainMenu, canvasFrame, headlines, values, varsSpinBox, varsCheckButton, firstResize
     headlines = []
     values = []
     varsSpinBox = []
     varsCheckButton = []
     firstResize = True
-    canvasFrame.clearCanvas()
     infoBar.clearInfoBar()
     mainMenu.clearMainMenu()
 
@@ -115,10 +113,11 @@ class MainMenu():
     def clearMainMenu(self):
         self.frameSensor.destroy()
         self.createFrameSenor()
+        self.i = 0
 
 class CanvasFrame():
     def __init__(self, root):
-        global daten, color
+        global color
         self.plotColors = color
         self.root = root
         self.zoomX = 1
@@ -167,15 +166,9 @@ class CanvasFrame():
 
 
     def canvasResized(self, event):
-        global firstResize
-        if firstResize == False:
-            self.drawCurve()
-        else:
-            firstResize = False
+        self.drawCurve()
 
-    def clearCanvas(self):
-        "destroy every line"
-        self.canvas.delete(ALL)
+
 
 class InfoBar():
     def __init__(self, root):
@@ -183,6 +176,7 @@ class InfoBar():
         self.varsSpinBox = []
         self.i = 0
         self.createInfoFrame()
+        self.yMax = 200
 
     def createInfoFrame(self):
         self.infoframe = Frame(root, height=80, bd=1, relief=RIDGE)
@@ -195,10 +189,10 @@ class InfoBar():
 
             self.var0 = StringVar()
             self.var1 = StringVar()
-            self.var1.set("600")
-            self.entry1min = Spinbox(self.infoframe, from_=1, to=1000, width=5, wrap=TRUE, textvariable=self.var0).grid(row=2, column=(self.i*2+1))
+            self.var1.set(self.yMax)
+            self.entry1min = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var0).grid(row=2, column=(self.i*2+1))
             self.varsSpinBox.append(self.var0)
-            self.entry1max = Spinbox(self.infoframe, from_=1, to=1000, width=5, wrap=TRUE, textvariable=self.var1).grid(row=3, column=(self.i*2+1))
+            self.entry1max = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var1).grid(row=3, column=(self.i*2+1))
             self.varsSpinBox.append(self.var1)
 
             self.i += 1
@@ -211,7 +205,7 @@ class InfoBar():
             if j%2 == 0:
                 self.varsSpinBox[j].set("1")
             else:
-                self.varsSpinBox[j].set("1000")
+                self.varsSpinBox[j].set(self.yMax)
 
     def updateInfo(self):
         self.infos = daten.getInfo()
