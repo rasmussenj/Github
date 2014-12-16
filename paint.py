@@ -1,5 +1,5 @@
 class MakeCurves():
-    def __init__(self,canvas):
+    def __init__(self, canvas):
         #Variable
         self.dataSet = []
         self.xMax = 0
