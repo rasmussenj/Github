@@ -44,7 +44,6 @@ def clearEverything():
 
 class MenuBar():
     def __init__(self, root):
-
         self.root = root
         self.menubar = Menu(self.root)
 
