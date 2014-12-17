@@ -104,7 +104,7 @@ def writeFile(inputFilename, writer):
     Reads every line and writes every 5th line into output file but only the wanted rows.
     :param inputFilename: filename
     :param writer: output file
-    :return:
+    :return: nothing
     '''
     #go throw every row
     with open(inputFilename) as csvfile:
