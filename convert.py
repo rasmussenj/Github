@@ -119,7 +119,7 @@ def writeFile(inputFilename, writer):
 #               parameter.append(row[19]) #etDES
 #               parameter.append(row[20]) #inDES
 #               parameter.append(row[21]) #etISO
-                parameter.append(row[22]) #inISO
+#               parameter.append(row[22]) #inISO
 #               parameter.append(row[23]) #etSEV
                 parameter.append(row[24]) #inSEV
 #               parameter.append(row[25]) #etN2O
