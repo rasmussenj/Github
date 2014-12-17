@@ -1,6 +1,10 @@
 class MakeCurves():
     def __init__(self, canvas):
-        #Variable
+        '''
+        Set some variables
+        :param canvas: canvas
+        :return: nothing
+        '''
         self.dataSet = []
         self.xMax = 0
         self.colorIndex = 0
@@ -25,6 +29,7 @@ class MakeCurves():
         self.xMin = 0
         self.xMax = len(dataSet) - 1
         self.repaint()
+
 
     # Paint logic
     #-------------
@@ -67,6 +72,7 @@ class MakeCurves():
         self.canvas.create_line(self.coordinates, fill=self.color)
         self.canvas.coords(self.grid, 0, 0, x, 0)
         self.canvas.config(scrollregion=self.canvas.bbox(self.grid))
+
 
     # Event Handlers
     #----------------
