@@ -111,7 +111,7 @@ def writeFile(inputFilename, writer):
         file = csv.reader(csvfile)
         for i, row in enumerate(file):
             parameter = []
-            if i % 5 == 1: #beginning with the second entry every 5th entry is written
+            if i % 50 == 1: #beginning with the second entry every 5th entry is written
                 parameter.append(row[0])  #time
                 parameter.append(row[1])  #Relative time in mS
                 parameter.append(row[2])  #Clock
@@ -119,7 +119,7 @@ def writeFile(inputFilename, writer):
 #               parameter.append(row[19]) #etDES
 #               parameter.append(row[20]) #inDES
 #               parameter.append(row[21]) #etISO
-#               parameter.append(row[22]) #inISO
+                parameter.append(row[22]) #inISO
 #               parameter.append(row[23]) #etSEV
                 parameter.append(row[24]) #inSEV
 #               parameter.append(row[25]) #etN2O
