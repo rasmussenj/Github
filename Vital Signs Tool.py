@@ -249,8 +249,11 @@ class InfoBar():
         Creates the frame for the spinboxes and the infos.
         :return: nothing
         '''
-        self.infoframe = Frame(root, height=80, bd=1, relief=RIDGE)
+        self.infoframe = Frame(root, height=60, bd=1, relief=RIDGE)
         self.infoframe.pack(side=BOTTOM, fill=BOTH)
+
+        self.infoframe2 = Frame(root, height=20, bd=1, relief=RIDGE)
+        self.infoframe2.pack(side=BOTTOM, fill=BOTH)
 
     def spinBox(self):
         '''
@@ -292,17 +295,14 @@ class InfoBar():
         :return: nothing
         '''
         self.infos = daten.getInfo()
-        self.starttime = Label(self.infoframe, text="Starttime: " + self.infos[1])
+        self.starttime = Label(self.infoframe2, text="Starttime: " + self.infos[1])
         self.starttime.grid(row=0, column=0)
 
-        self.endtime = Label(self.infoframe, text="Endtime: " + self.infos[2])
+        self.endtime = Label(self.infoframe2, text="Endtime: " + self.infos[2])
         self.endtime.grid(row=0, column=1)
 
-        self.length = Label(self.infoframe, text="Length: " + self.infos[0])
+        self.length = Label(self.infoframe2, text="Length: " + self.infos[0])
         self.length.grid(row=0, column=2)
-
-        self.case = Label(self.infoframe, text="Case:")
-        self.case.grid(row=0, column=3)
 
     def getMinMax(self, sensor):
         '''
@@ -321,6 +321,7 @@ class InfoBar():
         :return:
         '''
         self.infoframe.destroy()
+        self.infoframe2.destroy()
         self.createInfoFrame()
         self.varsSpinBox = []
         self.i = 0
