@@ -20,7 +20,7 @@ class MakeCurves():
         :param color: color of the line
         :param zoomX: the x zoom factor
         :param yMinMax: the min and max height
-        :return:
+        :return: nothing
         '''
         self.dataSet = dataSet
         self.color = color
