@@ -4,31 +4,35 @@ import time
 import paint
 import data
 
+# Global Variables
+#=================
 varsCheckButton = []
 varsSpinBox = []
 headlines = []
 values = []
 color = ["blue","red","green", "purple", "orange", "black"]
 
-def keyControlQ(event):
+def keyControlQ(*event):
     """
-    Asks the if the user really wants to quit the programm.
-    :param event: key events
+    Asks the if the user really wants to quit the program.
+    :param event: key events are not used
     :return: nothing
     """
     menuBar.quitWarning()
 
-def keyControlO(event):
+def keyControlO(*event):
     """
     Opens a new file.
-    :param event: key events
+    :param event: key events are not used
     :return: nothing
     """
     newFile()
 
 def newFile():
     """
-    Is the mainfuncion to create the plot.
+    Is the mainfuncion to create the plot. First everything is deleted, so there is no leftovers from a previous file.
+     Then the headlines are read after that the values are read, the information is shown in the infobar, the sensors
+     and the spinboxes are created and finally the lines are drawn.
     :return: nothing
     """
     global mainMenu, canvasFrame, headlines, values
@@ -45,7 +49,7 @@ def newFile():
 
 def clearEverything():
     """
-    Deletes everything and sets the values to the back.
+    Deletes everything and resets the variables.
     :return: nothing
     """
     global mainMenu, canvasFrame, headlines, values, varsSpinBox, varsCheckButton
@@ -59,7 +63,7 @@ def clearEverything():
 class MenuBar():
     def __init__(self, root):
         """
-        Creates the menubar.
+        Creates the menubar at the top.
         :param root: mainwindow
         :return: nothing
         """
@@ -86,19 +90,21 @@ class MenuBar():
 
     def updateWindow(self):
         """
-        Displays the update messege.
+        Displays the update messege: That there are no updates available.
         :return: nothing
         """
-        self.updateMessage = tkMessageBox.showinfo("Update", "No Update Avaiable...", icon="info")
+        self.updateMessage = tkMessageBox.showinfo("Update", "No Update Available...", icon="info")
+
     def versionInfo(self):
         """
-        Displays the version of the programm.
+        Displays the version of the program.
         :return: nothing
         """
         self.versionMessage = tkMessageBox.showinfo("Version", "Vital Signs Data Explorer Version 1.0", icon="info")
+
     def quitWarning(self):
         """
-        Asks the user if he really wants to quit the programm.
+        Asks the user if he really wants to quit the program.
         :return: nothing
         """
         self.result = tkMessageBox.askquestion("Quit", "Are You Sure? Data will be lost!", icon="warning")
@@ -108,7 +114,7 @@ class MenuBar():
 class MainMenu():
     def __init__(self, root):
         """
-        Creates the frame on the left side.
+        Creates the frame on the left side, in which the sensors are displayed later.
         :param root: mainwindow
         :return: nothing
         """
@@ -129,7 +135,8 @@ class MainMenu():
 
     def createSensor(self):
         """
-        Creates a checkbutton for every sensor.
+        Creates a checkbutton for every sensor and saves it in a list. The checkbutton gets the same color as the line
+        does.
         :return: nothing
         """
         global varsCheckButton, headlines, color
@@ -160,7 +167,7 @@ class MainMenu():
 class CanvasFrame():
     def __init__(self, root):
         """
-        Creates the frame, canvas and the scrollbar.
+        Creates the frame for the graphic, the canvas in the frame, the scrollbar and the zoom buttons.
         :param root: mainwindow
         :return: nothing
         """
@@ -223,7 +230,6 @@ class CanvasFrame():
                 self.yMinMax = infoBar.getMinMax(i)
                 self.curves.setData(self.value, color[i], self.zoomX, self.yMinMax)
 
-
     def canvasResized(self, event):
         """
         Draws the line again after the size of the canvas have been changed.
@@ -235,7 +241,8 @@ class CanvasFrame():
 class InfoBar():
     def __init__(self, root):
         """
-        Defines some start variables.
+        Defines some start variables and imports some global variables, which are used in this class. It also
+        creates the frame in which the infoframe and spinboxframe are placed.
         :param root: mainwindow
         :return: nothing
         """
@@ -248,7 +255,8 @@ class InfoBar():
 
     def createInfoFrame(self):
         """
-        Creates the frame for the spinboxes and the infos.
+        Creates the frame for the spinboxes and the information. These are to different frame, so the spinboxes are
+        at the right location.
         :return: nothing
         """
         self.infoframe = Frame(self.root, height=60, bd=1, relief=RIDGE)
@@ -259,7 +267,8 @@ class InfoBar():
 
     def spinBox(self):
         """
-        Creates the spinboxes for each sensor.
+        Creates the spinboxes for each sensor and two Button. One to reset the values and one to refresh the plot
+        with the new values.
         :return: nothing
         """
         for self.headline in headlines:
@@ -293,7 +302,7 @@ class InfoBar():
 
     def updateInfo(self):
         """
-        Displayes the infos.
+        Displays the information, which have been calculated in daten.getInfo().
         :return: nothing
         """
         self.infos = daten.getInfo()
@@ -319,7 +328,8 @@ class InfoBar():
 
     def clearInfoBar(self):
         """
-        Deletes everything from the inforbar.
+        Deletes everything from the inforbar, by destroying the frames and then createing them again.
+        Also sets the variable varsSpinBox and i to the start value.
         :return:
         """
         self.infoframe.destroy()
@@ -342,7 +352,7 @@ class Statusbar():
 
     def updateDateTime(self):
         """
-        Updates the time and date in the statusbar.
+        Updates the time and date in the statusbar every second.
         :return: nothing
         """
         self.now = time.strftime("%A %d.%m.%Y    %H:%M:%S")

@@ -5,14 +5,15 @@ import os
 class Data():
     def __init__(self):
         """
-        Defines the value headline
+        Defines an empty variable headline.
         :return: nothing
         """
         self.headline = ""
 
     def getFilename(self):
         """
-        Gets the file and if the file exists returns true.
+        Gets the file and if the file exists returns true. This is important, otherwise it would generate a error,
+         because the return of the function askopenfilename is no filename.
         :return: True or False
         """
         self.temp = str(askopenfilename())
@@ -24,8 +25,8 @@ class Data():
 
     def readHeadline(self):
         """
-        Reads the headline from the csv file
-        :return: titles from the headline
+        Reads the headline from the csv file and saves them in a list.
+        :return: the list with titles from the headline
         """
         with open(self.filename) as file:
             self.headline = file.readline()
@@ -35,9 +36,9 @@ class Data():
 
     def readValues(self, rowNumber):
         """
-        Reads the row.
-        :param rowNumber:
-        :return: row
+        Reads a specific row from the file with have been opened in the function getFilename.
+        :param rowNumber: is the row number which should be read.
+        :return: the row with every value in it except for the headline. Is a list.
         """
         self.valuesTemp = []
         with open(self.filename) as self.file:
@@ -49,7 +50,7 @@ class Data():
 
     def readAllValues(self):
         """
-        Reads every row from the file
+        Reads every row from the file and sets it in a 2-dimensional list together.
         :return: 2-dimensional list with every value
         """
         self.valueAll = []
@@ -61,7 +62,7 @@ class Data():
     def getInfo(self):
         """
         Get starttime, endtime and calculates length.
-        :return: starttime, endtime, length
+        :return: a list with starttime, endtime, length
         """
         self.durationRow = 1
         self.clockRow = 2
