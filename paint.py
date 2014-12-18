@@ -72,15 +72,3 @@ class MakeCurves():
         self.canvas.create_line(self.coordinates, fill=self.color)
         self.canvas.coords(self.grid, 0, 0, x, 0)
         self.canvas.config(scrollregion=self.canvas.bbox(self.grid))
-
-
-    # Event Handlers
-    #----------------
-
-    def canvasResized(self, event):
-        """
-        Repaint the lines after the size of the canvas have been changed.
-        :param event: Coordinates for the canvas
-        :return: nothing
-        """
-        self.repaint()
