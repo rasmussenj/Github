@@ -10,8 +10,8 @@ import os
 
 def manuellFile(*event):
     """
-    The user must say which files he wants to convert. Asks after every file if another should be converted.
-    :param event: key (it's optional)
+    The user must say which files he wants to convert. Calls the function manuellFileWriter as long as the return is true.
+    :param event: (Is only there so that the short cut works.)
     :return: nothing
     """
     filename = str(askopenfilename()) #get the filename
@@ -25,10 +25,10 @@ def manuellFile(*event):
 
 def manuellFileWriter(filename,writer):
     """
-    Writes the file and ask if another should be done.
-    :param filename: filename
-    :param writer: output file
-    :return: True or False
+    Writes the file and ask if another should be done. Return then true or false, so the while loop in manuellFile keeps looping.
+    :param filename: filename of the file which should be converted.
+    :param writer: the prepared output file
+    :return: True or False, depend on which answer the user gives
     """
     #writes the inputfile into the outputfile
     writeFile(filename, writer)
@@ -40,8 +40,8 @@ def manuellFileWriter(filename,writer):
 
 def statusBar(message):
     """
-    Writes the filename in a statusbar
-    :param message: the message
+    Writes the filename in the statusbar. The latest filename appears always at the top of the list.
+    :param message: the filename of the file which have been converted.
     :return: nothing
     """
     global TextField
@@ -50,8 +50,8 @@ def statusBar(message):
 
 def outputFile(filename):
     """
-    Opens the output file and writes the headline.
-    :param filename: filename
+    First creates a new filename out of the file, which have been chosen. Opens then the output file and writes the headline.
+    :param filename: the chosen filename
     :return: the output file
     """
     #Outputfilename
@@ -69,8 +69,8 @@ def outputFile(filename):
 
 def autoFile(*event):
     """
-    Reads every file in directory.
-    :param event: Key (it's optional)
+    Reads every file in directory. The first file must be choose, then the function replaces the number and reads so the next file until all have been converted.
+    :param event: (Is only there so that the short cut works.)
     :return: nothing
     """
     filename = str(askopenfilename())
@@ -101,8 +101,9 @@ def autoFile(*event):
 
 def writeFile(inputFilename, writer):
     """
-    Reads every line and writes every 5th line into output file but only the wanted rows.
-    :param inputFilename: filename
+    Reads every line in the chosen file and writes every 50th line into the output file. Only the wanted rows are writen into the output file.
+    If other rows should also be written in the output file the row must be specified in the if condition and the headlines also must be adopt.
+    :param inputFilename: the chosen filename
     :param writer: output file
     :return: nothing
     """
