@@ -4,17 +4,17 @@ import os
 
 class Data():
     def __init__(self):
-        '''
+        """
         Defines the value headline
         :return: nothing
-        '''
+        """
         self.headline = ""
 
     def getFilename(self):
-        '''
+        """
         Gets the file and if the file exists returns true.
         :return: True or False
-        '''
+        """
         self.temp = str(askopenfilename())
         if os.path.exists(self.temp):
             self.filename = self.temp
@@ -23,10 +23,10 @@ class Data():
             return False
 
     def readHeadline(self):
-        '''
+        """
         Reads the headline from the csv file
         :return: titles from the headline
-        '''
+        """
         with open(self.filename) as file:
             self.headline = file.readline()
         self.headline = self.headline.split(',')
@@ -34,11 +34,11 @@ class Data():
         return self.headline
 
     def readValues(self, rowNumber):
-        '''
+        """
         Reads the row.
         :param rowNumber:
         :return: row
-        '''
+        """
         self.valuesTemp = []
         with open(self.filename) as self.file:
             self.csvfile = csv.reader(self.file)
@@ -48,10 +48,10 @@ class Data():
         return self.valuesTemp
 
     def readAllValues(self):
-        '''
+        """
         Reads every row from the file
         :return: 2-dimensional list with every value
-        '''
+        """
         self.valueAll = []
         for rowNumber in range(len(self.headline)):
             self.values = self.readValues(rowNumber)
@@ -59,10 +59,10 @@ class Data():
         return self.valueAll
 
     def getInfo(self):
-        '''
+        """
         Get starttime, endtime and calculates length.
         :return: starttime, endtime, length
-        '''
+        """
         self.durationRow = 1
         self.clockRow = 2
 
