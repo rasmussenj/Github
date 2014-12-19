@@ -9,27 +9,27 @@ import os
 #***********************************************************************************************************************
 
 def manuellFile(*event):
-    '''
-    The user must say which files he wants to convert. Asks after every file if another should be converted.
-    :param event: key (it's optional)
+    """
+    The user must say which files he wants to convert. Calls the function manuellFileWriter as long as the return is true.
+    :param event: (Is only there so that the short cut works.)
     :return: nothing
-    '''
+    """
     filename = str(askopenfilename()) #get the filename
-    if (os.path.exists(filename)):
+    if os.path.exists(filename):
         writer = outputFile(filename) #make the outputfile and get the object writer to can write the file
         manuellerInput = manuellFileWriter(filename,writer) #writes the file into the outputfile and returns true or false
-        while (manuellerInput):
+        while manuellerInput:
             filename = str(askopenfilename()) #get the filename
-            if (os.path.exists(filename)):
+            if os.path.exists(filename):
                 manuellerInput = manuellFileWriter(filename,writer)
 
 def manuellFileWriter(filename,writer):
-    '''
-    Writes the file and ask if another should be done.
-    :param filename: filename
-    :param writer: output file
-    :return: True or False
-    '''
+    """
+    Writes the file and ask if another should be done. Return then true or false, so the while loop in manuellFile keeps looping.
+    :param filename: filename of the file which should be converted.
+    :param writer: the prepared output file
+    :return: True or False, depend on which answer the user gives
+    """
     #writes the inputfile into the outputfile
     writeFile(filename, writer)
     #asks if the user wants to convert another file
@@ -39,21 +39,21 @@ def manuellFileWriter(filename,writer):
         return False
 
 def statusBar(message):
-    '''
-    Writes the filename in a statusbar
-    :param message: the message
+    """
+    Writes the filename in the statusbar. The latest filename appears always at the top of the list.
+    :param message: the filename of the file which have been converted.
     :return: nothing
-    '''
+    """
     global TextField
     TextField.insert('1.0', message)
     convertWindow.update()
 
 def outputFile(filename):
-    '''
-    Opens the output file and writes the headline.
-    :param filename: filename
+    """
+    First creates a new filename out of the file, which have been chosen. Opens then the output file and writes the headline.
+    :param filename: the chosen filename
     :return: the output file
-    '''
+    """
     #Outputfilename
     newInputFilenameList = filename.split('_')
     del newInputFilenameList[-1]
@@ -68,20 +68,20 @@ def outputFile(filename):
     return writer
 
 def autoFile(*event):
-    '''
-    Reads every file in directory.
-    :param event: Key (it's optional)
+    """
+    Reads every file in directory. The first file must be choose, then the function replaces the number and reads so the next file until all have been converted.
+    :param event: (Is only there so that the short cut works.)
     :return: nothing
-    '''
+    """
     filename = str(askopenfilename())
-    if (os.path.exists(filename)):
+    if os.path.exists(filename):
         #Opens the outputfile
         writer = outputFile(filename)
         #check if the first file exists
         fileExsits = True
         #fileindex
         index = 1
-        while(fileExsits):
+        while fileExsits:
             #open the file
             writeFile(filename, writer)
             #create new filename
@@ -90,7 +90,7 @@ def autoFile(*event):
             newFilename = "_".join(newFilenameList)
             index += 1
             #if the index is smaller than 10 there is a zero before the number.
-            if (index < 10):
+            if index < 10:
                 endung = "0"+str(index)+".csv"
             else:
                 endung = str(index)+".csv"
@@ -100,12 +100,13 @@ def autoFile(*event):
             fileExsits = os.path.exists(filename)
 
 def writeFile(inputFilename, writer):
-    '''
-    Reads every line and writes every 5th line into output file but only the wanted rows.
-    :param inputFilename: filename
+    """
+    Reads every line in the chosen file and writes every 50th line into the output file. Only the wanted rows are writen into the output file.
+    If other rows should also be written in the output file the row must be specified in the if condition and the headlines also must be adopt.
+    :param inputFilename: the chosen filename
     :param writer: output file
     :return: nothing
-    '''
+    """
     #go throw every row
     with open(inputFilename) as csvfile:
         file = csv.reader(csvfile)

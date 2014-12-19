@@ -1,10 +1,10 @@
 class MakeCurves():
     def __init__(self, canvas):
-        '''
-        Set some variables
-        :param canvas: canvas
+        """
+        Set some variables.
+        :param canvas: the canvas in with the painting should be done.
         :return: nothing
-        '''
+        """
         self.dataSet = []
         self.xMax = 0
         self.colorIndex = 0
@@ -14,14 +14,14 @@ class MakeCurves():
         self.canvas = canvas
 
     def setData(self, dataSet, color, zoomX, yMinMax):
-        '''
-        Sets the data so the line can be drawn
+        """
+        Sets the data so the line can be drawn.
         :param dataSet: the values
         :param color: color of the line
         :param zoomX: the x zoom factor
         :param yMinMax: the min and max height
         :return: nothing
-        '''
+        """
         self.dataSet = dataSet
         self.color = color
         self.zoomX = zoomX
@@ -30,32 +30,31 @@ class MakeCurves():
         self.xMax = len(dataSet) - 1
         self.repaint()
 
-
-    # Paint logic
-    #-------------
-
     def repaint(self):
-        '''
-        Draws the grid and the lines.
+        """
+        First saves the height and the width of the canvas, then draws the grid and the lines.
         :return: nothing
-        '''
+        """
         self.width = self.canvas.winfo_width()
         self.height = self.canvas.winfo_height()
         self.drawGrid()
         self.plotLines()
 
     def drawGrid(self):
-        '''
-        Draws the grid.
+        """
+        Draws the grid as long as the canvas is. This is important because the scrollbar has the same length as this
+        line has. The color of the line is the same as the background color from the canvas.
         :return: nothing
-        '''
+        """
         self.grid = self.canvas.create_line(0, 0, self.width, 0, width=0, fill=self.gridColor)
 
     def plotLines(self):
-        '''
-        Draw the line into the canvas.
+        """
+        Draw the line into the canvas. If there is no value the line is goes out of the canvas. This way the user can not
+         see the line anymore. The line is saved in a list which length is defined at the beginning. Ath the end the grid
+         is updated and the scrollbar is made as long as the canvas.
         :return: nothing
-        '''
+        """
         self.lenDataSet = len(self.dataSet)
         self.coordinates = [0 for x in range(self.lenDataSet * 2)]
 
@@ -72,15 +71,3 @@ class MakeCurves():
         self.canvas.create_line(self.coordinates, fill=self.color)
         self.canvas.coords(self.grid, 0, 0, x, 0)
         self.canvas.config(scrollregion=self.canvas.bbox(self.grid))
-
-
-    # Event Handlers
-    #----------------
-
-    def canvasResized(self, event):
-        '''
-        Repaint the lines after the size of the canvas have been changed.
-        :param event: Coordinates for the canvas
-        :return: nothing
-        '''
-        self.repaint()
