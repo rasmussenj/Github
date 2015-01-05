@@ -3,6 +3,8 @@ import tkMessageBox
 import time
 import paint
 import data
+import subprocess
+import os
 
 # Global Variables
 #=================
@@ -69,10 +71,14 @@ class MenuBar():
         """
         self.root = root
         self.menubar = Menu(self.root)
+        self.pfad = os.path.realpath(__file__)[:-19]
+        self.aufruf = "python " + self.pfad + "convert.py"
+        print self.aufruf
 
         #file
         self.filemenu = Menu(self.menubar, tearoff = 0)
         self.filemenu.add_command(labe="Open", command=newFile, accelerator="Control-O")
+        self.filemenu.add_command(labe="Convert", command=lambda:subprocess.call(self.aufruf, shell=True))
         self.filemenu.add_separator()
         self.filemenu.add_command(label="Quit", command=self.quitWarning, accelerator="Control-Q")
         self.menubar.add_cascade(label="File", menu=self.filemenu)
