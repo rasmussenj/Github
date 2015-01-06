@@ -7,12 +7,15 @@ import subprocess
 import os
 
 # Global Variables
-#=================
+# =================
+fileExisting = False
 varsCheckButton = []
 varsSpinBox = []
 headlines = []
 values = []
-color = ["blue","red","green", "purple", "orange", "black"]
+curves = []
+color = ["blue", "red", "green", "purple", "orange", "black"]
+
 
 def keyControlQ(*event):
     """
@@ -37,12 +40,13 @@ def newFile():
      and the spinboxes are created and finally the lines are drawn.
     :return: nothing
     """
-    global mainMenu, canvasFrame, headlines, values
+    global mainMenu, canvasFrame, headlines, values, fileExisting
     if daten.getFilename():
         #CLEAE ALL THINGS
+        fileExisting = True
         clearEverything()
         headlines = daten.readHeadline()
-        headlines = headlines[3:] #get every sensor, the three is to not get the time titles
+        headlines = headlines[3:]  #get every sensor, the three is to not get the time titles
         values = daten.readAllValues()
         infoBar.updateInfo()
         mainMenu.createSensor()
@@ -62,6 +66,7 @@ def clearEverything():
     infoBar.clearInfoBar()
     mainMenu.clearMainMenu()
 
+
 class MenuBar():
     def __init__(self, root):
         """
@@ -71,24 +76,25 @@ class MenuBar():
         """
         self.root = root
         self.menubar = Menu(self.root)
-        self.pfad = os.path.realpath(__file__)[:-19]
+        self.pfad = os.path.realpath(__file__)
+
+        self.pfad = self.pfad[:-19]
         self.aufruf = "python " + self.pfad + "convert.py"
-        print self.aufruf
 
         #file
-        self.filemenu = Menu(self.menubar, tearoff = 0)
+        self.filemenu = Menu(self.menubar, tearoff=0)
         self.filemenu.add_command(labe="Open", command=newFile, accelerator="Control-O")
-        self.filemenu.add_command(labe="Convert", command=lambda:subprocess.call(self.aufruf, shell=True))
+        self.filemenu.add_command(labe="Convert", command=lambda: subprocess.call(self.aufruf, shell=True))
         self.filemenu.add_separator()
         self.filemenu.add_command(label="Quit", command=self.quitWarning, accelerator="Control-Q")
         self.menubar.add_cascade(label="File", menu=self.filemenu)
 
         ##info
-        self.infomenu = Menu(self.menubar, tearoff = 0)
-        self.infomenu.add_command(label="Info")
-        self.infomenu.add_command(label="Help")
-        self.infomenu.add_command(label="About", command=self.versionInfo)
-        self.infomenu.add_separator()
+        self.infomenu = Menu(self.menubar, tearoff=0)
+        # self.infomenu.add_command(label="Info")
+        # self.infomenu.add_command(label="Help")
+        # self.infomenu.add_command(label="About", command=self.versionInfo)
+        # self.infomenu.add_separator()
         self.infomenu.add_command(label="Check for Updates...", command=self.updateWindow)
         self.menubar.add_cascade(label="Info", menu=self.infomenu)
 
@@ -117,6 +123,7 @@ class MenuBar():
         if self.result == "yes":
             quit()
 
+
 class MainMenu():
     def __init__(self, root):
         """
@@ -129,6 +136,7 @@ class MainMenu():
         self.frameMainMenu = Frame(self.root, bd=1, relief=RIDGE, height=550)
         self.frameMainMenu.pack(side=LEFT, anchor=N, fill=Y)
         self.createFrameSenor()
+        self.createValueFrame()
 
     def createFrameSenor(self):
         """
@@ -137,7 +145,7 @@ class MainMenu():
         """
         self.frameSensor = Frame(self.frameMainMenu)
         Label(self.frameSensor, text="Sensoren").pack(padx=30)
-        self.frameSensor.pack()
+        self.frameSensor.pack(side=TOP)
 
     def createSensor(self):
         """
@@ -153,13 +161,38 @@ class MainMenu():
 
         for self.headline in headlines:
             self.var = IntVar()
-            self.checkButton = Checkbutton(self.frameSensor, text=self.headline, variable=self.var, command=canvasFrame.drawCurve, fg=self.textColors[self.i])
+            self.checkButton = Checkbutton(self.frameSensor, text=self.headline, variable=self.var,
+                                           command=canvasFrame.drawCurve, fg=self.textColors[self.i])
             self.checkButton.select()
-            self.checkButton.pack(padx=10)
+            self.checkButton.pack(padx=10, anchor=W)
             self.varsCheckButton.append(self.var)
             self.i += 1
         self.frameSensor.pack()
         varsCheckButton = self.varsCheckButton
+
+    def createValueFrame(self):
+        """
+        Creates the frame for the Values.
+        :return: nothing
+        """
+        self.frameValues = Frame(self.frameMainMenu, pady=30)
+        self.frameValues.pack(fill=Y, anchor=W)
+
+    def xValues(self):
+        """
+        Gets the x value and then for every x value the appendant value from the file. But first deletes the frame and
+        creates it again, so the old values disappears.
+        :return: nothing
+        """
+        global curves, values, varsCheckButton
+        self.yValue = curves.calcXValues()
+        self.frameValues.destroy()
+        self.createValueFrame()
+
+        for i in range(len(headlines)):
+            if varsCheckButton[i].get() == 1:
+                Label(self.frameValues, text=headlines[i] + ": " + str(values[i + 3][self.yValue]), fg=color[i]).pack(
+                    anchor=W, padx=10)
 
     def clearMainMenu(self):
         """
@@ -168,7 +201,16 @@ class MainMenu():
         """
         self.frameSensor.destroy()
         self.createFrameSenor()
+        self.frameValues.destroy()
         self.i = 0
+
+    def clearValueFrame(self):
+        """
+        Deletes the valueframe.
+        :return: nothing
+        """
+        self.frameValues.destroy()
+
 
 class CanvasFrame():
     def __init__(self, root):
@@ -177,7 +219,7 @@ class CanvasFrame():
         :param root: mainwindow
         :return: nothing
         """
-        global color
+        global color, curves, mainMenu
         self.plotColors = color
         self.root = root
         self.zoomX = 1
@@ -201,8 +243,9 @@ class CanvasFrame():
         self.canvas.config(xscrollcommand=self.scrollbar.set, scrollregion=self.canvas.bbox(ALL))
         self.scrollbar.pack(side=BOTTOM, fill=X)
 
+        curves = paint.MakeCurves(self.canvas)
         self.canvas.bind('<Configure>', self.canvasResized)
-        self.curves = paint.MakeCurves(self.canvas)
+        self.canvas.bind('<Button-1>', self.buttonPressed)
 
     def plusB(self):
         """
@@ -227,14 +270,16 @@ class CanvasFrame():
         Draws the lines for every sensor with is activated.
         :return: nothing
         """
-        global varsCheckButton, headlines, values, color
-        self.canvas.delete(ALL)
-        self.value =[]
-        for i in range(len(headlines)):
-            if varsCheckButton[i].get() == 1:
-                self.value = values[i+3]
-                self.yMinMax = infoBar.getMinMax(i)
-                self.curves.setData(self.value, color[i], self.zoomX, self.yMinMax)
+        global varsCheckButton, headlines, values, color, curves, fileExisting
+        if fileExisting:
+            self.canvas.delete(ALL)
+            mainMenu.clearValueFrame()
+            self.value = []
+            for i in range(len(headlines)):
+                if varsCheckButton[i].get() == 1:
+                    self.value = values[i + 3]
+                    self.yMinMax = infoBar.getMinMax(i)
+                    curves.setData(self.value, color[i], self.zoomX, self.yMinMax)
 
     def canvasResized(self, event):
         """
@@ -243,6 +288,19 @@ class CanvasFrame():
         :return: nothing
         """
         self.drawCurve()
+
+    def buttonPressed(self, event):
+        """
+        If the left mouse button is pressed it draws there a vertical line and writes in the mainMenu the values of the
+        activated sensors.
+        :param event: The coordinates where the left mouse button is pressed.
+        :return: nothing
+        """
+        global curves, mainMenu, fileExisting
+        if fileExisting:
+            curves.buttonPressed(event)
+            mainMenu.xValues()
+
 
 class InfoBar():
     def __init__(self, root):
@@ -278,21 +336,23 @@ class InfoBar():
         :return: nothing
         """
         for self.headline in headlines:
-            Label(self.infoframe, text=self.headline + " min:", fg=color[self.i]).grid(row=2, column=(self.i*2))
-            Label(self.infoframe, text=self.headline + " max:", fg=color[self.i]).grid(row=3, column=(self.i*2))
+            Label(self.infoframe, text=self.headline + " min:", fg=color[self.i]).grid(row=2, column=(self.i * 2))
+            Label(self.infoframe, text=self.headline + " max:", fg=color[self.i]).grid(row=3, column=(self.i * 2))
 
             self.var0 = StringVar()
             self.var1 = StringVar()
             self.var1.set(self.yMax)
-            self.entryMin = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var0).grid(row=2, column=(self.i*2+1))
+            self.entryMin = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE,
+                                    textvariable=self.var0).grid(row=2, column=(self.i * 2 + 1))
             self.varsSpinBox.append(self.var0)
-            self.entryMax = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE, textvariable=self.var1).grid(row=3, column=(self.i*2+1))
+            self.entryMax = Spinbox(self.infoframe, from_=1, to=self.yMax, width=5, wrap=TRUE,
+                                    textvariable=self.var1).grid(row=3, column=(self.i * 2 + 1))
             self.varsSpinBox.append(self.var1)
 
             self.i += 1
 
-        Button(self.infoframe, text="Refresh", command=canvasFrame.drawCurve).grid(row=2, column=self.i*2, padx=20)
-        Button(self.infoframe, text="Reset All", command=self.resetSpinBox).grid(row=3, column=self.i*2, padx=20)
+        Button(self.infoframe, text="Refresh", command=canvasFrame.drawCurve).grid(row=2, column=self.i * 2, padx=20)
+        Button(self.infoframe, text="Reset All", command=self.resetSpinBox).grid(row=3, column=self.i * 2, padx=20)
 
     def resetSpinBox(self):
         """
@@ -300,7 +360,7 @@ class InfoBar():
         :return: nothing
         """
         for j in range(len(self.varsSpinBox)):
-            if j%2 == 0:
+            if j % 2 == 0:
                 self.varsSpinBox[j].set(1)
             else:
                 self.varsSpinBox[j].set(self.yMax)
@@ -328,8 +388,8 @@ class InfoBar():
         :return: the min and max value
         """
         self.minMaX = []
-        self.minMaX.append(float(self.varsSpinBox[sensor*2].get()))
-        self.minMaX.append(float(self.varsSpinBox[sensor*2+1].get()))
+        self.minMaX.append(float(self.varsSpinBox[sensor * 2].get()))
+        self.minMaX.append(float(self.varsSpinBox[sensor * 2 + 1].get()))
         return self.minMaX
 
     def clearInfoBar(self):
@@ -343,6 +403,7 @@ class InfoBar():
         self.createInfoFrame()
         self.varsSpinBox = []
         self.i = 0
+
 
 class Statusbar():
     def __init__(self, root):

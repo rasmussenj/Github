@@ -9,6 +9,10 @@ class MakeCurves():
         self.xMax = 0
         self.colorIndex = 0
         self.gridColor = "white"
+        self.oldWidth = 1
+        self.cursorX = -1
+        self.cursorXLine = -1
+        self.zoomXold = 1
 
         #Save Canvas
         self.canvas = canvas
@@ -47,6 +51,8 @@ class MakeCurves():
         :return: nothing
         """
         self.grid = self.canvas.create_line(0, 0, self.width, 0, width=0, fill=self.gridColor)
+        self.canvas.delete("cursorLine")
+        self.cursorLine = self.canvas.create_line(0, 0, 0, 0, fill="black", tag="cursorLine")
 
     def plotLines(self):
         """
@@ -71,3 +77,24 @@ class MakeCurves():
         self.canvas.create_line(self.coordinates, fill=self.color)
         self.canvas.coords(self.grid, 0, 0, x, 0)
         self.canvas.config(scrollregion=self.canvas.bbox(self.grid))
+
+    def buttonPressed(self, event):
+        """
+        This function is called if the mouse button is clickt on the canvas. Then transform the coordinates into
+        coordinates on the canvas and draws the line and calls the function which calculates the x value.
+        :param event: the coordinates where the mouse button was clicked
+        :return: nothing
+        """
+        canvas = event.widget
+        self.cursorX = canvas.canvasx(event.x)
+        if self.cursorX >= 0:
+            self.canvas.coords(self.cursorLine, self.cursorX, 0, self.cursorX, self.height-1)
+            self.calcXValues()
+
+    def calcXValues(self):
+        """
+        Calculates the x value and returns it.
+        :return: The x value
+        """
+        self.xValue = int(self.cursorX * self.xMax / (self.width * self.zoomX))
+        return self.xValue
