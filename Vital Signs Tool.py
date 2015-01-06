@@ -144,7 +144,7 @@ class MainMenu():
         :return: nothing
         """
         self.frameSensor = Frame(self.frameMainMenu)
-        Label(self.frameSensor, text="Sensoren").pack(padx=30)
+        Label(self.frameSensor, text="Sensors").pack(padx=30)
         self.frameSensor.pack(side=TOP)
 
     def createSensor(self):
